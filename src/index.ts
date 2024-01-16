@@ -17,7 +17,7 @@ export default class Snowflake {
         const setEpoch = epoch instanceof Date ? epoch.valueOf() : new Date(epoch).valueOf();
 
         let id = (BigInt(timeUTC) - BigInt(setEpoch)) << BigInt(22);
-        id |= BigInt(shard ?? crypto.getRandomValues(new Uint32Array(1))[0] % 1024) << BigInt(12);
+        id |= BigInt(shard ?? Math.trunc(Math.random() * 1024)) << BigInt(12);
         id |= BigInt(this.#sequence++ % 4096);
 
         return id.toString();
@@ -25,7 +25,7 @@ export default class Snowflake {
 
     static parse(snowflake: string) {
         try {
-            const binaryValue = BigInt(snowflake).toString(2);
+            const binaryValue = BigInt(snowflake).toString(2).padStart(63, '0');
             return {
                 snowflake,
                 binary: '0b' + binaryValue,

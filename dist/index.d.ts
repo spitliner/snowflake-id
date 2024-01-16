@@ -1,14 +1,22 @@
 export default class Snowflake {
-    static generate(timestamp?: number | Date, epoch?: number | Date): string;
+    #private;
+    static generate({ timestamp, epoch, shard, }?: {
+        timestamp?: number | Date;
+        epoch?: number | Date;
+        shard?: number;
+    }): string;
     static parse(snowflake: string): {
+        snowflake: string;
         binary: string;
         timestamp: Date;
+        shard: number;
         sequence: number;
     } | {
+        snowflake: string;
         binary: string;
-        timestamp: string;
-        sequence: string;
+        timestamp: number;
+        shard: number;
+        sequence: number;
     };
-    private static sequence;
 }
 //# sourceMappingURL=index.d.ts.map
