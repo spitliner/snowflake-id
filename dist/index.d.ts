@@ -1,7 +1,7 @@
 export default class Snowflake {
     #private;
-    static generate({ timestamp, epoch, shard, }?: {
-        timestamp?: number | Date;
+    static generate({ time, epoch, shard, }?: {
+        time?: number | Date;
         epoch?: number | Date;
         shard?: number;
     }): string;

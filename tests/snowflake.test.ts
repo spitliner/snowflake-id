@@ -3,7 +3,7 @@ import Snowflake from '../src';
 
 test('test normal snowflake generation', () => {
     const snowflake = Snowflake.generate({
-        timestamp: Date.UTC(2010, 11, 5).valueOf(),
+        time: Date.UTC(2010, 11, 5).valueOf(),
         epoch: Date.UTC(1970, 0, 1).valueOf(),
         shard: 12,
     });
@@ -16,15 +16,15 @@ test('test normal snowflake generation', () => {
     })
 });
 
-test('test normal snowflake generation', () => {
+test('test normal snowflake generation 1', () => {
     const snowflake = Snowflake.generate({
-        timestamp: Date.UTC(1999, 1, 12).valueOf(),
+        time: Date.UTC(1999, 1, 12).valueOf(),
         epoch: Date.UTC(1970, 0, 1).valueOf(),
         shard: 1000,
     });
     expect(Snowflake.parse(snowflake)).toStrictEqual({
         snowflake,
-        binary: '0b011010101111010110110100110011000000000001111101000000000000001',
+        binary: '0b11010101111010110110100110011000000000001111101000000000000001',
         timestamp: new Date(Date.UTC(1999, 1, 12).valueOf()),
         shard: 1000,
         sequence: 1
