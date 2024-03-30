@@ -8,9 +8,19 @@ export default class Snowflake {
     static parse(snowflake: string): {
         snowflake: string;
         binary: string;
-        timestamp: Date;
+        timestamp: number;
         shard: number;
         sequence: number;
+    };
+    static generateUTC({ time, }?: {
+        time?: number | Date;
+    }): string;
+    static parseUTC(snowflake: string): {
+        snowflake: string;
+        binary: string;
+        timestamp: number;
+        sequence: number;
+        shard?: undefined;
     } | {
         snowflake: string;
         binary: string;

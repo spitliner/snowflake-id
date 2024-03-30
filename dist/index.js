@@ -1,8 +1,11 @@
 export default class Snowflake {
-    static generate({ time = Date.now(), epoch = Date.UTC(1970, 0, 1).valueOf(), shard, } = {}) {
+    static generate({ time = Date.now(), epoch = Date.UTC(2010, 0, 1).valueOf(), shard, } = {}) {
         const timestamp = time instanceof Date ? time.valueOf() : new Date(time).valueOf();
         const setEpoch = epoch instanceof Date ? epoch.valueOf() : new Date(epoch).valueOf();
-        let id = (BigInt(timestamp) - BigInt(setEpoch)) << BigInt(22);
+        if (setEpoch > timestamp) {
+            throw new Error('epoch can\'t be larger than timestamp');
+        }
+        let id = BigInt((timestamp - setEpoch) % (2 ** 41)) << BigInt(22);
         id |= BigInt(shard ? shard % 1024 : Math.trunc(Math.random() * 1024)) << BigInt(12);
         id |= BigInt(this.#sequence++ % 4096);
         return id.toString();
@@ -10,13 +13,46 @@ export default class Snowflake {
     static parse(snowflake) {
         try {
             const binaryValue = BigInt(snowflake).toString(2);
+            if (binaryValue.length > 63) {
+                throw new Error('value too big to be snowflake');
+            }
             const binaryFormatSnowflake = binaryValue.padStart(63, '0');
             return {
                 snowflake,
                 binary: '0b' + binaryValue,
-                timestamp: new Date(Number.parseInt(binaryFormatSnowflake.slice(0, 41), 2)),
-                shard: Number.parseInt(binaryFormatSnowflake.slice(41, 52), 2),
-                sequence: Number.parseInt(binaryFormatSnowflake.slice(52), 2),
+                timestamp: Number.parseInt(binaryFormatSnowflake.slice(0, 41), 2),
+                shard: Number.parseInt(binaryFormatSnowflake.slice(41, 51), 2),
+                sequence: Number.parseInt(binaryFormatSnowflake.slice(51), 2),
+            };
+        }
+        catch {
+            return {
+                snowflake,
+                binary: '',
+                timestamp: 0,
+                shard: 0,
+                sequence: 0,
+            };
+        }
+    }
+    static generateUTC({ time = Date.now(), } = {}) {
+        const timestamp = time instanceof Date ? time.valueOf() : new Date(time).valueOf();
+        let id = BigInt(timestamp % (2 ** 48)) << BigInt(16);
+        id |= BigInt(this.#sequence++ % 65_536);
+        return id.toString();
+    }
+    static parseUTC(snowflake) {
+        try {
+            const binaryValue = BigInt(snowflake).toString(2);
+            if (binaryValue.length > 63) {
+                throw new Error('value too big to be snowflake');
+            }
+            const binaryFormatSnowflake = binaryValue.padStart(63, '0');
+            return {
+                snowflake,
+                binary: '0b' + binaryValue,
+                timestamp: Number.parseInt(binaryFormatSnowflake.slice(0, 48), 2),
+                sequence: Number.parseInt(binaryFormatSnowflake.slice(48), 2),
             };
         }
         catch {
@@ -31,5 +67,4 @@ export default class Snowflake {
     }
     static #sequence = 0;
 }
-
 //# sourceMappingURL=index.js.map

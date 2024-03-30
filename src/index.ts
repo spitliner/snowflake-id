@@ -4,7 +4,7 @@
 export default class Snowflake {
     static generate({
         time = Date.now(),
-        epoch = Date.UTC(2000, 0, 1).valueOf(),
+        epoch = Date.UTC(2010, 0, 1).valueOf(),
         shard,
     }: {
         time?: number | Date;
@@ -79,7 +79,7 @@ export default class Snowflake {
             return {
                 snowflake,
                 binary: '0b' + binaryValue,
-                timestamp: new Date(Number.parseInt(binaryFormatSnowflake.slice(0, 48), 2)),
+                timestamp: Number.parseInt(binaryFormatSnowflake.slice(0, 48), 2),
                 sequence: Number.parseInt(binaryFormatSnowflake.slice(48), 2),
             };
         } catch {
