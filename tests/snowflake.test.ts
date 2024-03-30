@@ -34,7 +34,7 @@ test('test snowflake generation with UTC 1', () => {
     const snowflake = Snowflake.generateUTC({
         time: Date.UTC(2018, 7, 8).valueOf(),
     });
-    expect(Snowflake.parse(snowflake)).toStrictEqual({
+    expect(Snowflake.parseUTC(snowflake)).toStrictEqual({
         snowflake,
         binary: '0b101100101000101101101010101000100000000000000000000000010',
         timestamp: 3067372800000,
