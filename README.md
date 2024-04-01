@@ -3,11 +3,11 @@
 ## Install
 ### NPM
 ```
-npm i github:spitliner/snowflake-id#v0.0.1-alpha
+npm i github:spitliner/snowflake-id#v0.0.2
 ```
 ### YARN
 ```
-yarn add snowflake-id@git+https://github.com/spitliner/snowflake-id.git#v0.0.1-alpha
+yarn add snowflake-id@git+https://github.com/spitliner/snowflake-id.git#v0.0.2
 ```
 ## Usage
 ### ESM
