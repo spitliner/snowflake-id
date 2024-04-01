@@ -1,6 +1,15 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-extraneous-class */
 /* eslint-disable no-bitwise */
+
+function safePump(sequence: number) {
+    if (sequence >= Number.MAX_SAFE_INTEGER) {
+        return 0;
+    }
+
+    return sequence + 1;
+}
+
 export default class Snowflake {
     static generate({
         time = Date.now(),
@@ -20,7 +29,9 @@ export default class Snowflake {
 
         let id = BigInt((timestamp - setEpoch) % (2 ** 41)) << BigInt(22);
         id |= BigInt(shard ? shard % 1024 : Math.trunc(Math.random() * 1024)) << BigInt(12);
-        id |= BigInt(this.#sequence++ % 4096);
+        id |= BigInt(this.#sequence % 4096);
+
+        this.#sequence = safePump(this.#sequence);
 
         return id.toString();
     }
@@ -61,7 +72,9 @@ export default class Snowflake {
         const timestamp = time instanceof Date ? time.valueOf() : new Date(time).valueOf();
 
         let id = BigInt(timestamp % (2 ** 48)) << BigInt(16);
-        id |= BigInt(this.#sequence++ % 65_536);
+        id |= BigInt(this.#sequence % 65_536);
+
+        this.#sequence = safePump(this.#sequence);
 
         return id.toString();
     }
