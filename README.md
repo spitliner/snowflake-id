@@ -10,11 +10,19 @@ npm i github:spitliner/snowflake-id#v0.0.1-alpha
 yarn add snowflake-id@git+https://github.com/spitliner/snowflake-id.git#v0.0.1-alpha
 ```
 ## Usage
-
+### ESM
 ```js
 import Snowflake from 'snowflake-id';
 
 const id = Snowflake.generate() //For Twitter style snowflake
 
 const id_UTC = Snowflake.generateUTC() //For when sharding isn't need
+```
+### CommonJS
+```js
+const Snowflake = require('snowflake-id');
+
+const id = Snowflake.generate()
+
+const id_UTC = Snowflake.generateUTC()
 ```
