@@ -4,7 +4,6 @@ import Snowflake from '../src';
 test('test snowflake generation 1', () => {
     const snowflake = Snowflake.generate({
         time: Date.UTC(2010, 11, 5).valueOf(),
-        epoch: Date.UTC(1970, 0, 1).valueOf(),
         shard: 12,
     });
     expect(Snowflake.parse(snowflake)).toStrictEqual({
@@ -23,8 +22,8 @@ test('test snowflake generation 2', () => {
     });
     expect(Snowflake.parse(snowflake)).toStrictEqual({
         snowflake,
-        binary: '0b1011001110001111011110111100100000000000001111111000000000001',
-        timestamp: 385603200000,
+        binary: '0b101111111101011101110110001011100000000000001111111000000000001',
+        timestamp: 1647907200000,
         shard: 127,
         sequence: 1
     })

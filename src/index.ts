@@ -13,7 +13,7 @@ function safePump(sequence: number) {
 export default class Snowflake {
     static generate({
         time = Date.now(),
-        epoch = Date.UTC(2010, 0, 1).valueOf(),
+        epoch = 0,
         shard,
     }: {
         time?: number | Date;

@@ -1,3 +1,9 @@
+function safePump(sequence) {
+    if (sequence >= Number.MAX_SAFE_INTEGER) {
+        return 0;
+    }
+    return sequence + 1;
+}
 export default class Snowflake {
     static generate({ time = Date.now(), epoch = Date.UTC(2010, 0, 1).valueOf(), shard, } = {}) {
         const timestamp = time instanceof Date ? time.valueOf() : new Date(time).valueOf();
@@ -7,7 +13,8 @@ export default class Snowflake {
         }
         let id = BigInt((timestamp - setEpoch) % (2 ** 41)) << BigInt(22);
         id |= BigInt(shard ? shard % 1024 : Math.trunc(Math.random() * 1024)) << BigInt(12);
-        id |= BigInt(this.#sequence++ % 4096);
+        id |= BigInt(this.#sequence % 4096);
+        this.#sequence = safePump(this.#sequence);
         return id.toString();
     }
     static parse(snowflake) {
@@ -38,7 +45,8 @@ export default class Snowflake {
     static generateUTC({ time = Date.now(), } = {}) {
         const timestamp = time instanceof Date ? time.valueOf() : new Date(time).valueOf();
         let id = BigInt(timestamp % (2 ** 48)) << BigInt(16);
-        id |= BigInt(this.#sequence++ % 65_536);
+        id |= BigInt(this.#sequence % 65_536);
+        this.#sequence = safePump(this.#sequence);
         return id.toString();
     }
     static parseUTC(snowflake) {
