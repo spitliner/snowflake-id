@@ -97,7 +97,6 @@ export function parseUTCsnowflake(snowflake: string) {
             snowflake,
             binary: '',
             timestamp: 0,
-            shard: 0,
             sequence: 0,
         };
     }
